@@ -1,26 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Title</title>
+    <title>Featurebase Integration</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f7f9;
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 { color: #0070f3; }
+        p { color: #666; }
+    </style>
 </head>
 <body>
-  <script>!(function(e,t){var a="featurebase-sdk";function n(){if(!t.getElementById(a)){var e=t.createElement("script");(e.id=a),(e.src="https://do.featurebase.app/js/sdk.js"),t.getElementsByTagName("script")[0].parentNode.insertBefore(e,t.getElementsByTagName("script")[0])}};"function"!=typeof e.Featurebase&&(e.Featurebase=function(){(e.Featurebase.q=e.Featurebase.q||[]).push(arguments)}),"complete"===t.readyState||"interactive"===t.readyState?n():t.addEventListener("DOMContentLoaded",n)})(window,document);</script>
 
-  <!-- 2. Boot Featurebase with your messenger config -->
-  <script>
-    Featurebase("boot", {
-      appId: "69b7a3dea5b0a19faa848d97",         // required
-      email: "user@example.com",         // optional, requires secure installation by default
-      userId: "12345",                   // optional, requires secure installation by default
-      createdAt: "2025-05-06T12:00:00Z", // optional
-      theme: "light",                    // "light" or "dark"
-      language: "en",                     // short code (e.g. "en", "de", etc.)
-      // Hide the launcher button entirely
-      // For custom launcher button implementation
-      // hideDefaultLauncher: true // optional
-    });
-  </script>
+    <div class="container">
+        <h1>Featurebase Demo</h1>
+        <p>The feedback widget should appear in the bottom right corner.</p>
+        <p><em>(Running in Anonymous/Guest Mode)</em></p>
+    </div>
+
+    <script>
+        !(function(e, t) {
+            var a = "featurebase-sdk";
+            function n() {
+                if (!t.getElementById(a)) {
+                    var e = t.createElement("script");
+                    (e.id = a), (e.src = "https://do.featurebase.app/js/sdk.js"), t.getElementsByTagName("script")[0].parentNode.insertBefore(e, t.getElementsByTagName("script")[0])
+                }
+            }
+            "function" != typeof e.Featurebase && (e.Featurebase = function() {
+                (e.Featurebase.q = e.Featurebase.q || []).push(arguments)
+            }), "complete" === t.readyState || "interactive" === t.readyState ? n() : t.addEventListener("DOMContentLoaded", n)
+        })(window, document);
+    </script>
+
+    <script>
+        Featurebase("boot", {
+            appId: "69b7a3dea5b0a19faa848d97",
+            theme: "light",
+            language: "en"
+        });
+    </script>
+
 </body>
 </html>
