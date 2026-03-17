@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Feedback Portal</title>
+    <title>Support Portal</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     
     <script type="importmap">
     {
@@ -18,47 +19,115 @@
     <script type="module">import '@material/web/all.js';</script>
 
     <style>
-        body { font-family: 'Roboto', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f1f5f9; }
-        .card { padding: 2rem; background: white; border-radius: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); text-align: center; width: 350px; }
-        .hidden { display: none; }
-        #user-display { margin: 1.5rem 0; font-weight: 500; color: #1e293b; }
+        :root {
+            --nav-height: 64px;
+            --primary-blue: #0070f3;
+        }
+
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            margin: 0; 
+            padding-top: var(--nav-height); /* Prevent content from hiding under nav */
+            background-color: #f8fafc; 
+        }
+
+        /* --- Top Nav Bar Styles --- */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        #user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Content Area */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h2 id="greeting">Welcome</h2>
-        <p id="subtext">Sign in to leave feedback</p>
-        
-        <div id="user-display" class="hidden"></div>
+    <nav class="top-nav">
+        <a href="#" class="nav-brand">
+            <span class="material-symbols-outlined">explore</span>
+            The Curious Escape
+        </a>
 
-        <div class="actions">
+        <div class="nav-actions">
             <md-filled-button id="signin">Sign In</md-filled-button>
-            <md-outlined-button id="signout" class="hidden">Sign Out</md-outlined-button>
+
+            <div id="user-profile" class="hidden">
+                <span id="user-email"></span>
+                <md-outlined-button id="signout">Sign Out</md-outlined-button>
+            </div>
         </div>
-    </div>
+    </nav>
+
+    <main>
+        <h1>Feedback & Ideas</h1>
+        <p>Your feedback helps us build a better experience.</p>
+        
+        <div id="featurebase-container"></div>
+    </main>
 
     <script>
-        !(function(e,t){var a="featurebase-sdk";function n(){if(!t.getElementById(a)){var e=t.createElement("script");(e.id=a),(e.src="https://do.featurebase.app/js/sdk.js"),t.getElementsByTagName("script")[0].parentNode.insertBefore(e,t.getElementsByTagName("script")[0])}}"function"!=typeof e.Featurebase&&(e.Featurebase=function(){(e.Featurebase.q=e.Featurebase.q||[]).push(arguments)}),"complete"===t.readyState||"interactive"===t.readyState?n():t.addEventListener("DOMContentLoaded",n)})(window,document);
+        !(function(e,t){var a="featurebase-sdk";function n(){if(!t.getElementById(a)){var e=t.createElement("script");(e.id=a),(e.src="https://do.featurebase.app/js/sdk.js"),t.getElementsByTagName("script")[0].parentNode.insertBefore(e,t.getElementsByTagName("script")[0])}}"function"!=typeof e.Featurebase&&(e.Featurebase=function(){(e.Featurebase.q=e.Featurebase.q || []).push(arguments)}),"complete"===t.readyState||"interactive"===t.readyState?n():t.addEventListener("DOMContentLoaded",n)})(window,document);
     </script>
 
     <script type="module">
         import LogtoClient from '@logto/browser';
 
         const logto = new LogtoClient({
-            endpoint: 'https://9cbe0a.logto.app/', // From Logto Console
-            appId: 'zf8pq6upcdpd1z6rtvxlf',                    // From Logto Console
+            endpoint: 'https://9cbe0a.logto.app/',
+            appId: 'zf8pq6upcdpd1z6rtvxlf',
             scopes: ['email', 'profile']
         });
 
         const fbAppId = "69b7a3dea5b0a19faa848d97";
-        const redirectUrl = window.location.origin; // e.g. http://localhost:3000
+        const redirectUrl = window.location.origin;
 
-        async function runAuthFlow() {
-            // 1. Handle the return trip from Logto
+        async function init() {
+            // Handle callback from Logto
             if (window.location.search.includes('code=')) {
                 await logto.handleSignInCallback(window.location.href);
-                window.history.replaceState({}, document.title, "/"); 
+                window.history.replaceState({}, document.title, window.location.pathname);
             }
 
             const isAuthenticated = await logto.isAuthenticated();
@@ -66,14 +135,12 @@
             if (isAuthenticated) {
                 const user = await logto.fetchUserInfo();
                 
-                // Update UI
+                // Toggle UI to logged-in state
                 document.getElementById('signin').classList.add('hidden');
-                document.getElementById('signout').classList.remove('hidden');
-                document.getElementById('user-display').classList.remove('hidden');
-                document.getElementById('user-display').textContent = user.email;
-                document.getElementById('subtext').textContent = "You are logged in.";
+                document.getElementById('user-profile').classList.remove('hidden');
+                document.getElementById('user-email').textContent = user.email;
 
-                // 2. Identify user to Featurebase
+                // Sync with Featurebase
                 window.Featurebase("boot", {
                     appId: fbAppId,
                     user: {
@@ -83,7 +150,7 @@
                     }
                 });
             } else {
-                // Boot Featurebase as Guest
+                // Boot as guest
                 window.Featurebase("boot", { appId: fbAppId });
             }
         }
@@ -91,7 +158,7 @@
         document.getElementById('signin').onclick = () => logto.signIn(redirectUrl);
         document.getElementById('signout').onclick = () => logto.signOut(redirectUrl);
 
-        runAuthFlow();
+        init();
     </script>
 </body>
 </html>
