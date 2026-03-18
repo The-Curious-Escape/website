@@ -8,7 +8,7 @@ const logto = new LogtoClient({
 
 const baseUrl = window.location.origin + "/website";
 
-// --- Gravatar v3 (SHA-256) ---
+// --- Gravatar Logic ---
 async function getGravatar(email) {
     const msgBuffer = new TextEncoder().encode(email.trim().toLowerCase());
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -16,7 +16,7 @@ async function getGravatar(email) {
     return `https://www.gravatar.com/avatar/${hashHex}?s=200&d=mp`;
 }
 
-// --- Search Interaction ---
+// --- Interactions ---
 const searchWrapper = document.getElementById('search-wrapper');
 document.getElementById('search-trigger').onclick = (e) => {
     e.stopPropagation();
@@ -28,7 +28,7 @@ document.addEventListener('click', (e) => {
     if (!searchWrapper.contains(e.target)) searchWrapper.classList.remove('active');
 });
 
-// --- Initialization ---
+// --- Auth Initialization ---
 async function init() {
     if (window.location.search.includes('code=')) {
         await logto.handleSignInCallback(window.location.href);
@@ -39,18 +39,25 @@ async function init() {
     
     if (isAuthenticated) {
         const user = await logto.fetchUserInfo();
+        const picture = await getGravatar(user.email);
+
+        // Update UI Visibility
         document.getElementById('signin').classList.add('hidden');
         document.getElementById('user-profile').classList.remove('hidden');
 
-        const avatar = document.getElementById('user-avatar');
-        avatar.src = await getGravatar(user.email);
+        // Populate Dropdown Data
+        document.getElementById('user-avatar').src = picture;
+        document.getElementById('menu-avatar-name').src = picture;
+        document.getElementById('menu-avatar-email').src = picture;
+        document.getElementById('user-fullname').textContent = user.name || "User";
+        document.getElementById('user-email').textContent = user.email;
 
+        // Toggle Menu
         const menu = document.getElementById('profile-menu');
         document.getElementById('usage-anchor').onclick = () => menu.open = !menu.open;
     }
 }
 
-// --- Event Listeners ---
 document.getElementById('signin').onclick = () => logto.signIn(baseUrl);
 document.getElementById('signout-item').onclick = () => logto.signOut(baseUrl);
 document.getElementById('menu-button').onclick = () => document.getElementById('nav-drawer').show();
