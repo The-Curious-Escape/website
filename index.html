@@ -40,61 +40,17 @@
         <div class="nav-right">
             <div class="search-container" id="search-wrapper">
                 <md-icon-button id="search-trigger"><span class="material-symbols-outlined">search</span></md-icon-button>
-                <input type="text" id="search-input" placeholder="Search...">
+                <input type="text" id="search-input" placeholder="Search products...">
             </div>
-
             <md-filled-button id="signin">Sign In</md-filled-button>
-
-            <div id="user-profile" class="hidden">
-                <div class="profile-trigger" id="usage-anchor">
-                    <img id="user-avatar" class="avatar-img" alt="User">
-                </div>
-                
-                <md-menu id="profile-menu" anchor="usage-anchor">
-                    <md-menu-item interactive="false" class="profile-info-item">
-                        <img slot="start" id="menu-avatar-name" class="avatar-small" alt="User">
-                        <div slot="headline"><b id="user-fullname">First Name, Last Name</b></div>
-                    </md-menu-item>
-
-                    <md-menu-item interactive="false" class="profile-info-item">
-                        <img slot="start" id="menu-avatar-email" class="avatar-small" alt="User">
-                        <div slot="supporting-text"><sub id="user-email">email@example.com</sub></div>
-                    </md-menu-item>
-
-                    <md-divider></md-divider>
-
-                    <md-menu-item href="#account">
-                        <span slot="start" class="material-symbols-outlined">settings</span>
-                        <div slot="headline">Manage Account</div>
-                    </md-menu-item>
-
-                    <md-menu-item href="#subscriptions">
-                        <span slot="start" class="material-symbols-outlined">payments</span>
-                        <div slot="headline">Manage Subscription</div>
-                    </md-menu-item>
-
-                    <md-divider></md-divider>
-
-                    <md-menu-item id="signout-item">
-                        <span slot="start" class="material-symbols-outlined" style="color: #d32f2f;">logout</span>
-                        <div slot="headline" style="color: #d32f2f;">Logout</div>
-                    </md-menu-item>
-                </md-menu>
-            </div>
         </div>
     </header>
 
-    <md-dialog id="nav-drawer">
-        <div slot="content" class="drawer-content">
-            <md-list-item href="#home">Home</md-list-item>
-            <md-list-item href="#products">Products</md-list-item>
-            <md-list-item href="#about">About</md-list-item>
-        </div>
-    </md-dialog>
-
-    <main>
-        <h1>Welcome to The Curious Escape</h1>
-        <p>Premium gear for the modern explorer.</p>
+    
+        <section class="product-section">
+            <div class="product-grid" id="product-container">
+                </div>
+        </section>
     </main>
 
     <script type="module" src="main.js"></script>
