@@ -19,6 +19,8 @@
     }
     </script>
     <script type="module">import '@material/web/all.js';</script>
+
+    <script>!(function(e,t){var a="featurebase-sdk";function n(){if(!t.getElementById(a)){var e=t.createElement("script");(e.id=a),(e.src="https://do.featurebase.app/js/sdk.js"),t.getElementsByTagName("script")[0].parentNode.insertBefore(e,t.getElementsByTagName("script")[0])}};"function"!=typeof e.Featurebase&&(e.Featurebase=function(){(e.Featurebase.q=e.Featurebase.q||[]).push(arguments)}),"complete"===t.readyState||"interactive"===t.readyState?n():t.addEventListener("DOMContentLoaded",n)})(window,document);</script>
 </head>
 <body>
 
@@ -34,22 +36,51 @@
         <nav class="desktop-links">
             <a href="#home">Home</a>
             <a href="#products">Products</a>
-            <a href="#about">About</a>
+            <a href="https://thecuriousescape.featurebase.app/en/help" target="_blank">Help</a>
         </nav>
 
         <div class="nav-right">
-            <div class="search-container" id="search-wrapper">
-                <md-icon-button id="search-trigger"><span class="material-symbols-outlined">search</span></md-icon-button>
+            <div class="search-container">
+                <md-icon-button><span class="material-symbols-outlined">search</span></md-icon-button>
                 <input type="text" id="search-input" placeholder="Search products...">
             </div>
-            <md-filled-button id="signin">Sign In</md-filled-button>
+
+            <md-filled-button id="signin-btn">Sign In</md-filled-button>
+            
+            <div id="user-profile" style="display: none;">
+                <div class="profile-trigger" id="usage-anchor">
+                    <img id="user-avatar" class="avatar-img" src="" alt="User">
+                </div>
+                <md-menu id="profile-menu" anchor="usage-anchor">
+                    <md-menu-item id="manage-account">
+                        <span slot="start" class="material-symbols-outlined">settings</span>
+                        <div slot="headline">Manage Account</div>
+                    </md-menu-item>
+
+                    <md-menu-item href="https://patreon.com/The_Curious_Escape?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank">
+                        <span slot="start" class="material-symbols-outlined" style="color: #ff424d;">payments</span>
+                        <div slot="headline">Manage Subscription</div>
+                    </md-menu-item>
+
+                    <md-divider></md-divider>
+
+                    <md-menu-item id="signout-item">
+                        <span slot="start" class="material-symbols-outlined" style="color: #d32f2f;">logout</span>
+                        <div slot="headline" style="color: #d32f2f;">Logout</div>
+                    </md-menu-item>
+                </md-menu>
+            </div>
         </div>
     </header>
 
-    
+    <main>
+        <section class="hero">
+            <h1>Our Collection</h1>
+            <p id="welcome-msg">Premium gear for the modern explorer.</p>
+        </section>
+
         <section class="product-section">
-            <div class="product-grid" id="product-container">
-                </div>
+            <div class="product-grid" id="product-container"></div>
         </section>
     </main>
 
