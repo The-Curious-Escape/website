@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Curious Escape | Shop</title>
     
+    <link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/The-Curious-Escape/website/822a7c2bd8c939e81d2ba51dce499f54cf51b4b5/Preview%20(1).svg">
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     
     <script type="importmap">
     {
@@ -16,177 +19,84 @@
     }
     </script>
     <script type="module">import '@material/web/all.js';</script>
-
-    <style>
-        :root {
-            --nav-height: 70px;
-            --primary-blue: #0070f3;
-            --bg-light: #f8fafc;
-        }
-
-        body { 
-            font-family: 'Roboto', sans-serif; 
-            margin: 0; 
-            padding-top: var(--nav-height); 
-            background-color: var(--bg-light); 
-        }
-
-        /* --- Navigation --- */
-        .top-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: var(--nav-height);
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            z-index: 1000;
-        }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: #1e293b;
-        }
-
-        .logo-svg { height: 40px; width: auto; }
-        .brand-text { font-weight: 700; font-size: 1.2rem; }
-
-        .nav-actions { display: flex; align-items: center; gap: 12px; }
-        .hidden { display: none !important; }
-
-        /* --- Shop Content --- */
-        main {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .shop-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .product-card:hover { transform: translateY(-5px); }
-
-        .product-image {
-            width: 100%;
-            height: 200px;
-            background: #e2e8f0;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #94a3b8;
-        }
-
-        .price {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary-blue);
-            margin: 10px 0;
-        }
-    </style>
 </head>
 <body>
 
-    <nav class="top-nav">
-        <a href="/" class="nav-brand">
-            <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="4"/>
-                <path d="M30 50L45 65L70 35" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span class="brand-text">The Curious Escape</span>
-        </a>
+    <header class="top-nav">
+        <div class="nav-left">
+            <md-icon-button id="menu-button"><span class="material-symbols-outlined">menu</span></md-icon-button>
+            <a href="./" class="nav-brand">
+                <img src="https://raw.githubusercontent.com/The-Curious-Escape/website/822a7c2bd8c939e81d2ba51dce499f54cf51b4b5/Preview%20(1).svg" alt="Logo" class="logo-img">
+                <span class="brand-name">The Curious Escape</span>
+            </a>
+        </div>
 
-        <div class="nav-actions">
+        <nav class="desktop-links">
+            <a href="#home">Home</a>
+            <a href="#products">Products</a>
+            <a href="#about">About</a>
+        </nav>
+
+        <div class="nav-right">
+            <div class="search-container" id="search-wrapper">
+                <md-icon-button id="search-trigger"><span class="material-symbols-outlined">search</span></md-icon-button>
+                <input type="text" id="search-input" placeholder="Search...">
+            </div>
+
             <md-filled-button id="signin">Sign In</md-filled-button>
+
             <div id="user-profile" class="hidden">
-                <md-outlined-button id="signout">Sign Out</md-outlined-button>
+                <div class="profile-trigger" id="usage-anchor">
+                    <img id="user-avatar" class="avatar-img" alt="User">
+                </div>
+                
+                <md-menu id="profile-menu" anchor="usage-anchor">
+                    <md-menu-item interactive="false" class="profile-info-item">
+                        <img slot="start" id="menu-avatar-name" class="avatar-small" alt="User">
+                        <div slot="headline"><b id="user-fullname">Loading...</b></div>
+                    </md-menu-item>
+
+                    <md-menu-item interactive="false" class="profile-info-item">
+                        <img slot="start" id="menu-avatar-email" class="avatar-small" alt="User">
+                        <div slot="supporting-text"><sub id="user-email">email@example.com</sub></div>
+                    </md-menu-item>
+
+                    <md-divider></md-divider>
+
+                    <md-menu-item href="#account">
+                        <span slot="start" class="material-symbols-outlined">settings</span>
+                        <div slot="headline">Manage Account</div>
+                    </md-menu-item>
+
+                    <md-menu-item href="#subscriptions">
+                        <span slot="start" class="material-symbols-outlined">payments</span>
+                        <div slot="headline">Manage Subscription</div>
+                    </md-menu-item>
+
+                    <md-divider></md-divider>
+
+                    <md-menu-item id="signout-item">
+                        <span slot="start" class="material-symbols-outlined" style="color: #d32f2f;">logout</span>
+                        <div slot="headline" style="color: #d32f2f;">Logout</div>
+                    </md-menu-item>
+                </md-menu>
             </div>
         </div>
-    </nav>
+    </header>
+
+    <md-dialog id="nav-drawer">
+        <div slot="content" class="drawer-content">
+            <md-list-item href="#home">Home</md-list-item>
+            <md-list-item href="#products">Products</md-list-item>
+            <md-list-item href="#about">About</md-list-item>
+        </div>
+    </md-dialog>
 
     <main>
-        <section class="shop-header">
-            <h1>Our Collection</h1>
-            <p>Exclusive items for the curious traveler.</p>
-        </section>
-
-        <div class="product-grid">
-            <div class="product-card">
-                <div class="product-image">Product Image</div>
-                <h3>The Escape Map</h3>
-                <p class="price">$24.00</p>
-                <md-filled-tonal-button>Add to Cart</md-filled-tonal-button>
-            </div>
-            <div class="product-card">
-                <div class="product-image">Product Image</div>
-                <h3>Curious Journal</h3>
-                <p class="price">$18.00</p>
-                <md-filled-tonal-button>Add to Cart</md-filled-tonal-button>
-            </div>
-            <div class="product-card">
-                <div class="product-image">Product Image</div>
-                <h3>Explorer's Compass</h3>
-                <p class="price">$45.00</p>
-                <md-filled-tonal-button>Add to Cart</md-filled-tonal-button>
-            </div>
-        </div>
+        <h1>Welcome to The Curious Escape</h1>
+        <p>Premium gear for the modern explorer.</p>
     </main>
 
-    <script type="module">
-        import LogtoClient from '@logto/browser';
-
-        const logto = new LogtoClient({
-            endpoint: 'https://9cbe0a.logto.app/',
-            appId: 'zf8pq6upcdpd1z6rtvxlf',
-            scopes: ['email', 'profile']
-        });
-
-        const redirectUrl = window.location.origin;
-
-        async function init() {
-            if (window.location.search.includes('code=')) {
-                await logto.handleSignInCallback(window.location.href);
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-
-            const isAuthenticated = await logto.isAuthenticated();
-
-            if (isAuthenticated) {
-                document.getElementById('signin').classList.add('hidden');
-                document.getElementById('user-profile').classList.remove('hidden');
-            }
-        }
-
-        document.getElementById('signin').onclick = () => logto.signIn(redirectUrl);
-        document.getElementById('signout').onclick = () => logto.signOut(redirectUrl);
-
-        init();
-    </script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
