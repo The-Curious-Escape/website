@@ -1,65 +1,85 @@
-import LogtoClient from '@logto/browser';
+import { LogtoClient } from '@logto/browser';
 
 const logto = new LogtoClient({
-    endpoint: 'https://9cbe0a.logto.app/',
-    appId: 'zf8pq6upcdpd1z6rtvxlf',
-    scopes: ['email', 'profile']
+  endpoint: 'https://9cbe0a.logto.app/',
+  appId: 'YOUR_LOGTO_APP_ID', // Replace with your actual Logto App ID
 });
 
-const baseUrl = window.location.origin + "/website";
+let allProducts = [];
+let userTier = "Free"; 
 
-// --- Gravatar Logic ---
-async function getGravatar(email) {
-    const msgBuffer = new TextEncoder().encode(email.trim().toLowerCase());
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-    const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-    return `https://www.gravatar.com/avatar/${hashHex}?s=200&d=mp`;
-}
-
-// --- Interactions ---
-const searchWrapper = document.getElementById('search-wrapper');
-document.getElementById('search-trigger').onclick = (e) => {
-    e.stopPropagation();
-    searchWrapper.classList.toggle('active');
-    if(searchWrapper.classList.contains('active')) document.getElementById('search-input').focus();
-};
-
-document.addEventListener('click', (e) => {
-    if (!searchWrapper.contains(e.target)) searchWrapper.classList.remove('active');
-});
-
-// --- Auth Initialization ---
 async function init() {
+    // 1. Handle Sign-in Callback
     if (window.location.search.includes('code=')) {
         await logto.handleSignInCallback(window.location.href);
         window.history.replaceState({}, document.title, window.location.pathname);
     }
 
+    // 2. Auth State Check
     const isAuthenticated = await logto.isAuthenticated();
-    
     if (isAuthenticated) {
         const user = await logto.fetchUserInfo();
-        const picture = await getGravatar(user.email);
+        
+        // Update UI
+        document.getElementById('signin-btn').style.display = 'none';
+        document.getElementById('user-profile').style.display = 'block';
+        document.getElementById('user-avatar').src = user.picture || '';
+        document.getElementById('welcome-msg').textContent = `Welcome back, ${user.name || 'Explorer'}!`;
 
-        // Update UI Visibility
-        document.getElementById('signin').classList.add('hidden');
-        document.getElementById('user-profile').classList.remove('hidden');
+        // Boot Featurebase
+        window.Featurebase && window.Featurebase("boot", {
+            appId: "69b7a3dea5b0a19faa848d97",
+            email: user.email,
+            userId: user.sub,
+            theme: "light"
+        });
+    }
 
-        // Populate Dropdown Data
-        document.getElementById('user-avatar').src = picture;
-        document.getElementById('menu-avatar-name').src = picture;
-        document.getElementById('menu-avatar-email').src = picture;
-        document.getElementById('user-fullname').textContent = user.name || "User";
-        document.getElementById('user-email').textContent = user.email;
+    // 3. Load and Render Products
+    await loadProducts();
 
-        // Toggle Menu
-        const menu = document.getElementById('profile-menu');
-        document.getElementById('usage-anchor').onclick = () => menu.open = !menu.open;
+    // Event Listeners
+    document.getElementById('signin-btn').onclick = () => logto.signIn(window.location.origin);
+    document.getElementById('signout-item').onclick = () => logto.signOut(window.location.origin);
+    
+    // Toggle Profile Menu
+    document.getElementById('usage-anchor').onclick = () => {
+        document.getElementById('profile-menu').open = !document.getElementById('profile-menu').open;
+    };
+}
+
+async function loadProducts() {
+    try {
+        const response = await fetch('products.json');
+        allProducts = await response.json();
+        render(allProducts);
+    } catch (e) {
+        console.error("Product load error", e);
     }
 }
 
-document.getElementById('signin').onclick = () => logto.signIn(baseUrl);
-document.getElementById('signout-item').onclick = () => logto.signOut(baseUrl);
-document.getElementById('menu-button').onclick = () => document.getElementById('nav-drawer').show();
+function render(data) {
+    const container = document.getElementById('product-container');
+    container.innerHTML = data.map(p => {
+        // Logic for Patreon-only items can be added here
+        return `
+            <md-elevated-card class="product-card">
+                <img src="${p.image}" alt="${p.name}" class="card-img">
+                <div class="card-content">
+                    <h3 class="title">${p.name}</h3>
+                    <p class="price">$${p.price.toFixed(2)}</p>
+                    <md-filled-button class="buy-btn" onclick="alert('Added ${p.name}')">Add to Cart</md-filled-button>
+                </div>
+            </md-elevated-card>
+        `;
+    }).join('');
+}
+
+// Real-time Search
+document.getElementById('search-input').addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+    const filtered = allProducts.filter(p => p.name.toLowerCase().includes(query));
+    render(filtered);
+});
 
 init();
