@@ -6,6 +6,7 @@
     <title>The Curious Escape | Shop</title>
     
     <link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/The-Curious-Escape/website/822a7c2bd8c939e81d2ba51dce499f54cf51b4b5/Preview%20(1).svg">
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     
@@ -20,92 +21,12 @@
     <script type="module">import '@material/web/all.js';</script>
 
     <script>!(function(e,t){var a="featurebase-sdk";function n(){if(!t.getElementById(a)){var e=t.createElement("script");(e.id=a),(e.src="https://do.featurebase.app/js/sdk.js"),t.getElementsByTagName("script")[0].parentNode.insertBefore(e,t.getElementsByTagName("script")[0])}};"function"!=typeof e.Featurebase&&(e.Featurebase=function(){(e.Featurebase.q=e.Featurebase.q||[]).push(arguments)}),"complete"===t.readyState||"interactive"===t.readyState?n():t.addEventListener("DOMContentLoaded",n)})(window,document);</script>
-
-    <style>
-        :root {
-            --primary: #6750a4;
-            --surface: #fef7ff;
-            --on-surface: #1d1b20;
-            --patreon: #ff424d;
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            background-color: var(--surface);
-            color: var(--on-surface);
-        }
-
-        .top-nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 16px;
-            background: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-left, .nav-right, .desktop-links {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .nav-brand { text-decoration: none; color: black; display: flex; align-items: center; gap: 8px; font-weight: bold; }
-        .logo-img { height: 32px; }
-        
-        .desktop-links a { text-decoration: none; color: inherit; font-weight: 500; }
-        .desktop-links a:hover { color: var(--primary); }
-
-        .search-container {
-            display: flex;
-            align-items: center;
-            background: #f1f1f1;
-            border-radius: 24px;
-            padding: 0 8px;
-        }
-
-        #search-input {
-            border: none;
-            background: transparent;
-            padding: 8px;
-            outline: none;
-            width: 140px;
-            transition: width 0.3s;
-        }
-        #search-input:focus { width: 220px; }
-
-        .avatar-img {
-            width: 40px; height: 40px; border-radius: 50%;
-            cursor: pointer; border: 2px solid var(--primary); object-fit: cover;
-        }
-
-        .hero { text-align: center; padding: 60px 20px 40px; }
-        .product-section { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
-        }
-
-        .product-card { height: 100%; --md-elevated-card-container-shape: 16px; position: relative; }
-        .card-img { width: 100%; height: 240px; object-fit: cover; border-radius: 16px 16px 0 0; }
-        .card-content { padding: 20px; }
-        .title { margin: 0 0 8px 0; font-size: 1.2rem; }
-        .price { font-size: 1.3rem; font-weight: bold; color: #2e7d32; margin-bottom: 20px; }
-        .buy-btn { width: 100%; }
-
-        @media (max-width: 768px) { .desktop-links { display: none; } }
-    </style>
 </head>
 <body>
 
     <header class="top-nav">
         <div class="nav-left">
-            <md-icon-button><span class="material-symbols-outlined">menu</span></md-icon-button>
+            <md-icon-button id="menu-button"><span class="material-symbols-outlined">menu</span></md-icon-button>
             <a href="./" class="nav-brand">
                 <img src="https://raw.githubusercontent.com/The-Curious-Escape/website/822a7c2bd8c939e81d2ba51dce499f54cf51b4b5/Preview%20(1).svg" alt="Logo" class="logo-img">
                 <span class="brand-name">The Curious Escape</span>
@@ -119,26 +40,26 @@
         </nav>
 
         <div class="nav-right">
-            <div class="search-container">
-                <md-icon-button><span class="material-symbols-outlined">search</span></md-icon-button>
-                <input type="text" id="search-input" placeholder="Search gear...">
+            <div class="search-container" id="search-wrapper">
+                <md-icon-button id="search-trigger"><span class="material-symbols-outlined">search</span></md-icon-button>
+                <input type="text" id="search-input" placeholder="Search products...">
             </div>
 
-            <md-filled-button id="signin-btn">Sign In</md-filled-button>
-            
+            <md-filled-button id="signin">Sign In</md-filled-button>
+
             <div id="user-profile" style="display: none;">
-                <div class="profile-trigger" id="usage-anchor">
-                    <img id="user-avatar" class="avatar-img" src="" alt="User">
+                <div class="profile-trigger" id="profile-anchor">
+                    <img id="user-avatar" src="" alt="User" style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer; border: 2px solid #6750a4;">
                 </div>
-                <md-menu id="profile-menu" anchor="usage-anchor">
+                <md-menu id="profile-menu" anchor="profile-anchor">
                     <md-menu-item href="https://patreon.com/The_Curious_Escape?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank">
-                        <span slot="start" class="material-symbols-outlined" style="color: var(--patreon);">payments</span>
+                        <span slot="start" class="material-symbols-outlined" style="color: #ff424d;">payments</span>
                         <div slot="headline">Manage Subscription</div>
                     </md-menu-item>
                     <md-divider></md-divider>
-                    <md-menu-item id="signout-item">
-                        <span slot="start" class="material-symbols-outlined" style="color: #d32f2f;">logout</span>
-                        <div slot="headline" style="color: #d32f2f;">Logout</div>
+                    <md-menu-item id="signout">
+                        <span slot="start" class="material-symbols-outlined">logout</span>
+                        <div slot="headline">Sign Out</div>
                     </md-menu-item>
                 </md-menu>
             </div>
@@ -146,115 +67,11 @@
     </header>
 
     <main>
-        <section class="hero">
-            <h1>Our Collection</h1>
-            <p id="welcome-msg">Premium gear for the modern explorer.</p>
-        </section>
-
         <section class="product-section">
             <div class="product-grid" id="product-container"></div>
         </section>
     </main>
 
-    <script type="module">
-        import { LogtoClient } from '@logto/browser';
-
-        const logto = new LogtoClient({
-            endpoint: 'https://9cbe0a.logto.app/',
-            appId: 'zf8pq6upcdpd1z6rtvxlf', 
-        });
-
-        let allProducts = [];
-
-        async function init() {
-            // 1. Handle Redirect Callback
-            if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-                try {
-                    await logto.handleSignInCallback(window.location.href);
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                } catch (err) { console.error('Sign-in error:', err); }
-            }
-
-            // 2. Auth Status
-            const isAuthenticated = await logto.isAuthenticated();
-            const signInBtn = document.getElementById('signin-btn');
-            const userProfile = document.getElementById('user-profile');
-            const userAvatar = document.getElementById('user-avatar');
-
-            if (isAuthenticated) {
-                const user = await logto.fetchUserInfo();
-                if (signInBtn) signInBtn.style.display = 'none';
-                if (userProfile) userProfile.style.display = 'block';
-                if (userAvatar) userAvatar.src = user.picture || '';
-
-                if (window.Featurebase) {
-                    window.Featurebase("boot", {
-                        appId: "69b7a3dea5b0a19faa848d97",
-                        email: user.email,
-                        userId: user.sub
-                    });
-                }
-            } else {
-                if (window.Featurebase) window.Featurebase("boot", { appId: "69b7a3dea5b0a19faa848d97" });
-            }
-
-            // 3. Listeners
-            if (signInBtn) signInBtn.onclick = () => logto.signIn(window.location.origin);
-            
-            const signOutItem = document.getElementById('signout-item');
-            if (signOutItem) signOutItem.onclick = () => logto.signOut(window.location.origin);
-
-            const avatarTrigger = document.getElementById('usage-anchor');
-            if (avatarTrigger) {
-                avatarTrigger.onclick = () => {
-                    const menu = document.getElementById('profile-menu');
-                    if (menu) menu.open = !menu.open;
-                };
-            }
-
-            // 4. Products & Search
-            await loadProducts();
-
-            const searchInput = document.getElementById('search-input');
-            if (searchInput) {
-                searchInput.addEventListener('input', (e) => {
-                    const query = e.target.value.toLowerCase();
-                    const filtered = allProducts.filter(p => p.name.toLowerCase().includes(query));
-                    render(filtered);
-                });
-            }
-        }
-
-        async function loadProducts() {
-            try {
-                const response = await fetch('products.json');
-                allProducts = await response.json();
-                render(allProducts);
-            } catch (e) {
-                document.getElementById('product-container').innerHTML = `<p>Error loading products.</p>`;
-            }
-        }
-
-        function render(data) {
-            const container = document.getElementById('product-container');
-            if (!container) return;
-            if (data.length === 0) {
-                container.innerHTML = '<p style="grid-column:1/-1; text-align:center;">No results found.</p>';
-                return;
-            }
-            container.innerHTML = data.map(p => `
-                <md-elevated-card class="product-card">
-                    <img src="${p.image}" alt="${p.name}" class="card-img">
-                    <div class="card-content">
-                        <h3 class="title">${p.name}</h3>
-                        <p class="price">$${p.price.toFixed(2)}</p>
-                        <md-filled-button class="buy-btn" onclick="alert('Added ${p.name}')">Add to Cart</md-filled-button>
-                    </div>
-                </md-elevated-card>
-            `).join('');
-        }
-
-        init();
-    </script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
