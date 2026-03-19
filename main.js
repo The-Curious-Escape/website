@@ -1,4 +1,4 @@
-import { LogtoClient } from '@logto/browser'; // Fixed import name to match importmap
+import LogtoClient from '@logto/browser'; // Fixed import name to match importmap
 
 const logto = new LogtoClient({
     endpoint: 'https://9cbe0a.logto.app/',
