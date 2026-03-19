@@ -2,7 +2,7 @@ import { LogtoClient } from '@logto/browser';
 
 const logto = new LogtoClient({
   endpoint: 'https://9cbe0a.logto.app/',
-  appId: 'YOUR_LOGTO_APP_ID', // Replace with your actual Logto App ID
+  appId: 'zf8pq6upcdpd1z6rtvxlf', // Replace with your actual Logto App ID
 });
 
 let allProducts = [];
